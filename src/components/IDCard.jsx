@@ -2,6 +2,9 @@
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 
+// Get deployed backend URL from Vercel environment variables
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+
 function IDCard({ student }) {
 
   const cardRef = useRef();
@@ -9,7 +12,7 @@ function IDCard({ student }) {
   // Get correct student photo URL
   const photoUrl = student.photo
     ? student.photo.startsWith("/uploads/")
-      ? `http://localhost:5000${student.photo}`
+      ? `${API_URL}${student.photo}`
       : student.photo
     : "";
 
