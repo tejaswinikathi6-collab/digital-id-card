@@ -7,8 +7,12 @@ import IDCard from "./components/IDCard";
 
 import "./App.css";
 
-function App() {
+// Backend API URL
+const API_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000"
+).replace(/\/$/, "");
 
+function App() {
   const [student, setStudent] = useState({
     name: "",
     rollNumber: "",
@@ -27,13 +31,13 @@ function App() {
   const fetchStudents = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:5000/api/students"
+        `${API_URL}/api/students`
       );
 
       setStudents(response.data);
-
     } catch (error) {
-      console.log("Error fetching students:", error);
+      console.error("Error fetching students:", error);
+      alert("Unable to load students. Please try again.");
     }
   };
 
@@ -71,19 +75,23 @@ function App() {
 
     try {
       await axios.delete(
-        `http://localhost:5000/api/students/${id}`
+        `${API_URL}/api/students/${id}`
       );
 
       alert("Student deleted successfully!");
 
       await fetchStudents();
-
     } catch (error) {
-      alert("Error deleting student");
+      console.error("Error deleting student:", error);
+
+      alert(
+        error.response?.data?.message ||
+        "Error deleting student"
+      );
     }
   };
 
-  // Search students
+  // Search students by name or roll number
   const filteredStudents = students.filter((item) =>
     item.name.toLowerCase().includes(search.toLowerCase()) ||
     item.rollNumber.toLowerCase().includes(search.toLowerCase())
@@ -94,7 +102,7 @@ function App() {
     if (!photo) return "";
 
     return photo.startsWith("/uploads/")
-      ? `http://localhost:5000${photo}`
+      ? `${API_URL}${photo}`
       : photo;
   };
 

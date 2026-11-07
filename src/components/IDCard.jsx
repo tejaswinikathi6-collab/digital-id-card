@@ -2,11 +2,12 @@
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 
-// Get deployed backend URL from Vercel environment variables
-const API_URL = import.meta.env.VITE_API_URL?.replace(/\/$/, "");
+// Render backend URL
+const API_URL = (
+  import.meta.env.VITE_API_URL || "http://localhost:5000"
+).replace(/\/$/, "");
 
 function IDCard({ student }) {
-
   const cardRef = useRef();
 
   // Get correct student photo URL
@@ -18,7 +19,6 @@ function IDCard({ student }) {
 
   // Download ID Card as PDF
   const handleDownload = () => {
-
     const element = cardRef.current;
 
     const options = {
@@ -44,19 +44,16 @@ function IDCard({ student }) {
 
         {/* College Header */}
         <div className="college-header">
-
           <div className="college-logo">
             <span>ABC</span>
           </div>
 
           <h3>ABC COLLEGE OF ENGINEERING</h3>
           <p>STUDENT IDENTITY CARD</p>
-
         </div>
 
         {/* Student Photo */}
         <div className="photo-section">
-
           {photoUrl ? (
             <img src={photoUrl} alt="Student" />
           ) : (
@@ -64,16 +61,13 @@ function IDCard({ student }) {
               PHOTO
             </div>
           )}
-
         </div>
 
         {/* Student Details */}
         <div className="student-details">
-
           <h4>{student.name || "Student Name"}</h4>
 
           <div className="student-info">
-
             <p>
               <strong>Roll Number:</strong>
               <span>{student.rollNumber || "XXXXXXXX"}</span>
@@ -98,9 +92,7 @@ function IDCard({ student }) {
               <strong>Phone:</strong>
               <span>{student.phone || "Phone"}</span>
             </p>
-
           </div>
-
         </div>
 
         {/* Signature Section */}
